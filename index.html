@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Myster IGI – Gry, YouTube, AI & Programowanie</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    /* --- ZMIENNE I STYL GLOBALNY --- */
+    :root {
+      --bg-color: #0b0d17;
+      --card-bg: rgba(20, 24, 45, 0.7);
+      --primary-cyan: #00f0ff;
+      --primary-purple: #7000ff;
+      --text-main: #ffffff;
+      --text-muted: #a0a7cc;
+      --glow-cyan: 0 0 15px rgba(0, 240, 255, 0.5);
+      --glow-purple: 0 0 15px rgba(112, 0, 255, 0.5);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Rajdhani', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 15% 20%, rgba(112, 0, 255, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 85% 80%, rgba(0, 240, 255, 0.15) 0%, transparent 40%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* --- NAWIGACJA --- */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 8%;
+      background: rgba(11, 13, 23, 0.8);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .logo-avatar {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      border: 2px solid var(--primary-cyan);
+      box-shadow: var(--glow-cyan);
+    }
+
+    .logo-text {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: 1px;
+    }
+
+    .logo-text span {
+      color: var(--primary-cyan);
+    }
+
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 30px;
+    }
+
+    nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+    }
+
+    nav a:hover {
+      color: var(--primary-cyan);
+      text-shadow: var(--glow-cyan);
+    }
+
+    /* --- SEKCYJNA GLÓWNA (HERO) --- */
+    .hero {
+      text-align: center;
+      padding: 60px 20px 40px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .hero h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2.8rem;
+      font-weight: 900;
+      line-height: 1.2;
+      margin-bottom: 25px;
+      text-transform: uppercase;
+    }
+
+    .hero h1 span {
+      background: linear-gradient(90deg, var(--primary-purple), var(--primary-cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .btn-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 32px;
+      background: linear-gradient(90deg, #00c6ff, #0072ff);
+      color: #fff;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      text-decoration: none;
+      border-radius: 30px;
+      box-shadow: 0 0 20px rgba(0, 198, 255, 0.4);
+      transition: all 0.3s ease;
+      font-size: 1rem;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-cta:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 0 30px rgba(0, 198, 255, 0.8);
+    }
+
+    /* --- KARTY OFERTY / SEKCJE --- */
+    .cards-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+      padding: 20px 8% 60px;
+      max-width: 1300px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 30px 25px;
+      text-align: center;
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(5px);
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary-cyan), var(--primary-purple));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(0, 240, 255, 0.4);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .card:hover::before {
+      opacity: 1;
+    }
+
+    .card-icon {
+      font-size: 3rem;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, var(--primary-cyan), var(--primary-purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .card h3 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.4rem;
+      margin-bottom: 12px;
+      letter-spacing: 0.5px;
+    }
+
+    .card p {
+      color: var(--text-muted);
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+
+    /* --- STOPKA --- */
+    footer {
+      padding: 30px 8%;
+      background: rgba(7, 9, 15, 0.9);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .social-links a {
+      color: var(--text-muted);
+      font-size: 1.4rem;
+      transition: color 0.3s ease, transform 0.3s ease;
+    }
+
+    .social-links a:hover {
+      color: var(--primary-cyan);
+      transform: translateY(-3px);
+    }
+
+    .copyright {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    /* --- RESPONSYWNOŚĆ --- */
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        gap: 15px;
+      }
+      .hero h1 {
+        font-size: 2rem;
+      }
+      footer {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="#" class="logo-container">
+      <svg class="logo-avatar" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="50" cy="50" r="48" fill="#14182d" stroke="#00f0ff" stroke-width="4"/>
+        <path d="M30 75 C30 60, 40 55, 50 55 C60 55, 70 60, 70 75" fill="#7000ff"/>
+        <circle cx="50" cy="40" r="16" fill="#f0d0b0"/>
+        <path d="M34 38 C34 25, 66 25, 66 38 C66 30, 34 30, 34 38" fill="#4a2e18"/>
+        <circle cx="44" cy="40" r="2" fill="#000"/>
+        <circle cx="56" cy="40" r="2" fill="#000"/>
+        <path d="M46 47 Q50 50 54 47" stroke="#000" stroke-width="1.5" fill="none"/>
+      </svg>
+      <div class="logo-text">MYSTER <span>IGI</span></div>
+    </a>
+
+    <nav>
+      <ul>
+        <li><a href="#gry">Gry</a></li>
+        <li><a href="#yt">YouTube</a></li>
+        <li><a href="#ai">AI & Code</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="hero">
+    <h1>ODKRYWAJ SWÓJ ŚWIAT Z <br><span>MYSTER IGI: GRY, YOUTUBE, AI I WIĘCEJ!</span></h1>
+    <button class="btn-cta" id="ctaBtn">
+      <i class="fa-solid fa-bolt"></i> DOŁĄCZ DO SPOŁECZNOŚCI
+    </button>
+  </main>
+
+  <section class="cards-container">
+    <div class="card" id="gry">
+      <i class="fa-solid fa-gamepad card-icon"></i>
+      <h3>GRY KOMPUTEROWE</h3>
+      <p>Najlepsze gameplaye, recenzje, nowości ze świata gamingu oraz wspólne turnieje i wyzwania.</p>
+    </div>
+
+    <div class="card" id="yt">
+      <i class="fa-brands fa-youtube card-icon"></i>
+      <h3>KANAŁ YOUTUBE</h3>
+      <p>Subskrybuj i oglądaj nowe materiały. Od szalonych wyzwań po zaawansowane poradniki.</p>
+    </div>
+
+    <div class="card" id="ai">
+      <i class="fa-solid fa-robot card-icon"></i>
+      <h3>PROGRAMOWANIE Z AI</h3>
+      <p>Twórz przyszłość za pomocą Sztucznej Inteligencji. Tutoriale, skrypty i praktyczne projekty.</p>
+    </div>
+  </section>
+
+  <footer>
+    <div class="social-links">
+      <a href="https://youtube.com" target="_blank" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
+      <a href="https://discord.com" target="_blank" title="Discord"><i class="fa-brands fa-discord"></i></a>
+      <a href="https://x.com" target="_blank" title="X / Twitter"><i class="fa-brands fa-x-twitter"></i></a>
+      <a href="https://github.com" target="_blank" title="GitHub"><i class="fa-brands fa-github"></i></a>
+    </div>
+    <div class="copyright">
+      misterigi.com &copy; 2026. Wszystkie prawa zastrzeżone.
+    </div>
+  </footer>
+
+  <script>
+    // Interakcja przycisku CTA
+    document.getElementById('ctaBtn').addEventListener('click', function() {
+      alert('Witaj w społeczności Myster IGI! Przekierowywanie do kanału YouTube / Discorda...');
+      // Tutaj możesz podmienić na przekierowanie, np.:
+      // window.location.href = 'https://youtube.com';
+    });
+
+    // Płynne przewijanie do sekcji
+    document.querySelectorAll('nav a').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href').substring(1);
+        const targetElement = document.getElementById(targetId);
+        if (targetElement) {
+          targetElement.scrollIntoView({
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+  </script>
+</body>
+</html>
